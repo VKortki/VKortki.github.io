@@ -115,6 +115,16 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
@@ -147,64 +157,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/3632233996/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/IMG_2406.png">
-      <meta itemprop="name" content="VyacheslavKorotki">
-      <meta itemprop="description" content="记录学习的过程">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="VyacheslavK的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/3632233996/" class="post-title-link" itemprop="url">test</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-03-12 16:33:46 / 修改时间：16:34:18" itemprop="dateCreated datePublished" datetime="2022-03-12T16:33:46+08:00">2022-03-12</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="testing"><a href="#testing" class="headerlink" title="testing!"></a>testing!</h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/posts/3949291905/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -229,15 +181,17 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-07 11:29:24" itemprop="dateCreated datePublished" datetime="2022-03-07T11:29:24+08:00">2022-03-07</time>
+              <time title="创建时间：2022-03-12 17:19:34" itemprop="dateCreated datePublished" datetime="2022-03-12T17:19:34+08:00">2022-03-12</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-12 15:12:55" itemprop="dateModified" datetime="2022-03-12T15:12:55+08:00">2022-03-12</time>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
               </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
 
           
 
@@ -256,152 +210,93 @@
 <li>把博客部署到远端</li>
 <li>给个人博客换主题</li>
 </ol>
-<!--本次安装演示的过程均在Mac OS下，理论上Linux上的安装与这个是一样的-->
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/3949291905/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/86382637/">
 
-<h3 id="环境部署"><a href="#环境部署" class="headerlink" title="环境部署"></a>环境部署</h3><ol>
-<li><p>node.js安装</p>
-<ol>
-<li><p><a target="_blank" rel="noopener" href="https://nodejs.org/">node.js</a>下载，完成后进行安装</p>
-<p><img src="/posts/3949291905/image-20220307113603544.png"></p>
-</li>
-<li><p>切换到root用户</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br></pre></td></tr></table></figure></li>
-<li><p>查看node.js和npm版本</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/IMG_2406.png">
+      <meta itemprop="name" content="VyacheslavKorotki">
+      <meta itemprop="description" content="记录学习的过程">
+    </span>
 
-<p>出现版本号则node.js安装完成</p>
-</li>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VyacheslavK的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/86382637/" class="post-title-link" itemprop="url">免密码远端部署Hexo到GitHub（使用SSH Key）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-12 17:08:48 / 修改时间：17:20:02" itemprop="dateCreated datePublished" datetime="2022-03-12T17:08:48+08:00">2022-03-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>实现思路</li>
+<li>开始配置</li>
+<li>使用脚本简化远端部署步骤</li>
 </ol>
-</li>
-<li><p>安装Hexo框架</p>
-<ul>
-<li><p>安装需要借助npm包管理器，由于国内镜像源的速度很慢，一般使用之前先安装cnpm，即淘宝的源。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cnpm --rigistry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure></li>
-<li><p>查看cnpm版本</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm -v</span><br></pre></td></tr></table></figure></li>
-<li><p>使用cnpm全局安装Hexo框架</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm install -g hexo-cli</span><br></pre></td></tr></table></figure></li>
-<li><p>查看hexo版本</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo -v</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
-<h3 id="初始化个人博客与写博客"><a href="#初始化个人博客与写博客" class="headerlink" title="初始化个人博客与写博客"></a>初始化个人博客与写博客</h3><ol>
-<li><p>正式搭建博客</p>
-<ul>
-<li><p>查看当前所在的工作目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pwd</span></span><br></pre></td></tr></table></figure></li>
-<li><p>创建文件夹</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> blog</span><br></pre></td></tr></table></figure>
-
-<p>==如果搭建博客过程中有问题，可以把blog文件夹干掉重新来==</p>
-</li>
-<li><p>进入blog文件夹</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> blog</span><br></pre></td></tr></table></figure></li>
-<li><p>使用Hexo初始化博客</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo hexo init</span><br></pre></td></tr></table></figure>
-
-<p>如果终端出现</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO Start blogging with Hexo!</span><br></pre></td></tr></table></figure>
-
-<p>表示初始化博客完成。</p>
-<p>此时blog文件夹下会自动生成一些文件以及文件夹，这些是Hexo为你自动生成的。</p>
-</li>
-</ul>
-</li>
-<li><p>启动博客</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-
-<p>这样，Hexo会在本地<a href="https://localhost:4000启动">https://localhost:4000启动</a></p>
-<ul>
-<li>在浏览器中输入<a href="https://localhost:4000，访问博客">https://localhost:4000，访问博客</a></li>
-</ul>
-</li>
-<li><p>新建一篇文章</p>
-<ul>
-<li><p>在终端输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo n <span class="string">&quot;我的第一篇博客文章&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>会显示出</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO Created:/Users/用户名/blog/source/_posts/我的一篇博客文章.md</span><br></pre></td></tr></table></figure>
-
-<p>其中用户名为你自己的电脑管理员名称</p>
-</li>
-<li><p>进入./source/_posts目录下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="built_in">source</span>/_posts</span><br></pre></td></tr></table></figure>
-
-<p>可以查看是否存在有我们刚刚创建的文章</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -l</span><br></pre></td></tr></table></figure></li>
-<li><p>为新建的文章加点内容</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim <span class="string">&quot;我的一篇博客文章&quot;</span>.md</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>将新建的文章推送到hexo上</p>
-<ol>
-<li><p>退回到blog目录下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../..</span><br></pre></td></tr></table></figure></li>
-<li><p>清空</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure></li>
-<li><p>生成</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>重新启动博客</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure></li>
-<li><p>浏览器访问博客会发现刚刚新建的文章已经展示在上面了，利用这种方式可以在本地测试。</p>
-</li>
-</ol>
-<h3 id="把博客部署到远端"><a href="#把博客部署到远端" class="headerlink" title="把博客部署到远端"></a>把博客部署到远端</h3><ol>
-<li><p>先把本地的博客关掉</p>
-<ul>
-<li><p>这里有两种情况</p>
-<ol>
-<li><p>在前文执行了<code>hexo s</code>后终端显示为：</p>
-<img src="/posts/3949291905/image-20220307120902889.png">
-
-<p>使用Ctrl + C即可停止</p>
-</li>
-<li><p>在前文执行了<code>hexo s</code>后，hexo进程被放入到了后台运行，可以使用<code>ps</code>查看当前当前系统中的进程，如果看到有<code>CMD</code>为<code>hexo</code>的进程，记下它的PID，使用<code>kill PID</code>即可杀死进程。</p>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><p> 登录我们的GitHub</p>
-</li>
-</ol>
-<ul>
-<li><p>新建仓库（new repository），命名格式为<code>GitHub用户名.github.io</code>，后期部署好后，浏览器输入<code>GitHub用户名.github.io</code>即可访问到博客了。</p>
-<img src="/posts/3949291905/image-20220307121541597.png">
-
-<p>这里因为我之前已经创建了，所以会出现警告。</p>
-</li>
-</ul>
-<ol start="3">
-<li><p>回到终端窗口</p>
-<ul>
-<li><p>安装一个hexo-deployer-git工具（当前工作目录应该是<code>/Users/用户名/blog</code>）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure></li>
-<li><p>设置当前目录下的<code>_config.yml</code>文件</p>
-<img src="/posts/3949291905/image-20220307122031536.png"></li>
-<li><p>终端输入<code>vim _config.yml</code>，进入文件拉到最下面，设置为下面的样式，保存退出</p>
-<img src="/posts/3949291905/image-20220307122547745.png"></li>
-<li><p>部署到远端</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-<p>==这个过程中要输入GitHub的账号以及密码，账号就是GitHub里面的账号，而密码由于GitHub更新之后，需要在GitHub中设置一个<a target="_blank" rel="noopener" href="https://blog.csdn.net/bing900713/article/details/80222188?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_aa&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_aa&utm_relevant_index=2">token</a>，根据链接中的教程设置好token后，复制粘贴作为密码使用。==</p>
-<p>同时如果是mac电脑，可能还会出现提示，选择还原默认即可。</p>
-</li>
-</ul>
-</li>
-<li><p>回到GitHub的仓库，刷新会发现仓库已经跟本地的blog文件夹同步了。</p>
-</li>
-<li><p>浏览器访问<code>GitHub用户名.github.io</code>，则能访问到博客了。</p>
-</li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/86382637/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -487,6 +382,18 @@
           <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
