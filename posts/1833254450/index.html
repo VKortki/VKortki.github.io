@@ -20,20 +20,24 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="数据集分割的难点在于：  左右冠状动脉由于其较细的管径、位置，导致很难成像，使得分辨率比较低且噪音较多。">
+  <meta name="description" content="一直以来，对Java虚拟机中的运行时数据区域这个概念不是很能理解，今天，就好好来聊一下什么是运行时数据区域。 1.Java编译过程java整个编译以及运行过程可以简化为：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="all_data数据集分割">
-<meta property="og:url" content="http://example.com/posts/2588481087/index.html">
+<meta property="og:title" content="Java虚拟机：运行时数据区域的理解">
+<meta property="og:url" content="http://example.com/posts/1833254450/index.html">
 <meta property="og:site_name" content="VyacheslavK&#39;s Notes">
-<meta property="og:description" content="数据集分割的难点在于：  左右冠状动脉由于其较细的管径、位置，导致很难成像，使得分辨率比较低且噪音较多。">
+<meta property="og:description" content="一直以来，对Java虚拟机中的运行时数据区域这个概念不是很能理解，今天，就好好来聊一下什么是运行时数据区域。 1.Java编译过程java整个编译以及运行过程可以简化为：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-13T13:23:07.000Z">
-<meta property="article:modified_time" content="2022-03-13T13:26:25.106Z">
+<meta property="og:image" content="http://example.com/posts/1833254450/image-20220720200118138.png">
+<meta property="og:image" content="http://example.com/posts/1833254450/image-20220720200049863.png">
+<meta property="og:image" content="http://example.com/posts/1833254450/image-20220720201856260.png">
+<meta property="article:published_time" content="2022-07-20T12:57:30.000Z">
+<meta property="article:modified_time" content="2022-07-20T13:00:21.837Z">
 <meta property="article:author" content="VyacheslavKorotki">
-<meta property="article:tag" content="医学影像实验结果分析">
+<meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/posts/1833254450/image-20220720200118138.png">
 
-<link rel="canonical" href="http://example.com/posts/2588481087/">
+<link rel="canonical" href="http://example.com/posts/1833254450/">
 
 
 <script id="page-configurations">
@@ -46,7 +50,7 @@
   };
 </script>
 
-  <title>all_data数据集分割 | VyacheslavK's Notes</title>
+  <title>Java虚拟机：运行时数据区域的理解 | VyacheslavK's Notes</title>
   
 
 
@@ -156,7 +160,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/posts/2588481087/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/1833254450/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/head_photo.jpg">
@@ -169,7 +173,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          all_data数据集分割
+          Java虚拟机：运行时数据区域的理解
         </h1>
 
         <div class="post-meta">
@@ -180,7 +184,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-03-13 21:23:07 / 修改时间：21:26:25" itemprop="dateCreated datePublished" datetime="2022-03-13T21:23:07+08:00">2022-03-13</time>
+              <time title="创建时间：2022-07-20 20:57:30 / 修改时间：21:00:21" itemprop="dateCreated datePublished" datetime="2022-07-20T20:57:30+08:00">2022-07-20</time>
             </span>
 
           <br>
@@ -189,7 +193,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>731</span>
+              <span>1.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -208,54 +212,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>数据集分割的难点在于：</p>
-<ul>
-<li>左右冠状动脉由于其较细的管径、位置，导致很难成像，使得分辨率比较低且噪音较多。</li>
-</ul>
+        <p>一直以来，对Java虚拟机中的运行时数据区域这个概念不是很能理解，今天，就好好来聊一下什么是运行时数据区域。</p>
+<h4 id="1-Java编译过程"><a href="#1-Java编译过程" class="headerlink" title="1.Java编译过程"></a>1.Java编译过程</h4><p>java整个编译以及运行过程可以简化为：</p>
+<p><img src="/posts/1833254450/image-20220720200118138.png"></p>
 <span id="more"></span>
-
-<h3 id="至今为止使用的一些方法比对"><a href="#至今为止使用的一些方法比对" class="headerlink" title="至今为止使用的一些方法比对"></a>至今为止使用的一些方法比对</h3><ol>
-<li><p>使用3D Unet + 人为分配标签所占loss权重进行分割的结果分析：</p>
-<ul>
-<li><p>整体而言分割效果很差：</p>
-<ul>
-<li><p>因为整张图像输入进去，加上模型的参数量，使得GPU无法负载，无法进行训练。因而需要采用下采样的方式，但这一操作对本来体积就比较细小的左右冠状动脉分割会起到反效果</p>
-</li>
-<li><p>进行了预分割之后，虽然图像可以被裁剪到只含有目标对象的大小，但是还是需要进行下采样的过程（主要是为了统一patch的形状）</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>使用2D Unet + 人为分配标签所占loss权重进行分割的结果分析：</p>
-<ul>
-<li>比3D Unet效果好了很多，主要问题还是在于左右冠状动脉分割，其他标签分割效果不错</li>
-<li>左右冠状动脉分割效果差的原因：<ol>
-<li>采用固定的loss权重比例，但每个样本之间各个标签的比例（尤其是左右冠状动脉所占比例）相差比较大，用固定的loss权重比例，使得模型的泛化能力比较差，对数据集的要求比较高，对loss权重这个超参数的设置要求很高</li>
-<li>由于原因1，使得某些数据分割效果很好，但另一些很差</li>
+<p>或者也可以参考下图：</p>
+<p><img src="/posts/1833254450/image-20220720200049863.png"></p>
+<p>Java源码首先被编译成字节码文件，而这个字节码文件就是实现Java代码跨平台运行的关键，无论是什么平台，只要安装了能够识别字节码文件的JVM（Java Virtual Machine，Java虚拟机），通过JVM对字节码文件进行解析，把字节码转换成具体平台上的机器指令，就可以运行。</p>
+<h4 id="2-运行时数据区域"><a href="#2-运行时数据区域" class="headerlink" title="2. 运行时数据区域"></a>2. 运行时数据区域</h4><p>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而一直存在，有些区域则是依赖用户线程的启动和结束而建立和销毁。</p>
+<p>Java虚拟机所管理的内存将会包括以下几个运行时数据区域：</p>
+<p><img src="/posts/1833254450/image-20220720201856260.png"></p>
+<ol>
+<li>程序计数器：主要是为<b>多线程</b>服务。由于Java虚拟机的多线程是通过线程轮流切换、分配处理器执行时间的方式来实现的，在任何一个确定的时刻，一个处理器(对于多核处理器来说是一个内核)都只会执行一条线程中的指令。因此，为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间计数器互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。</li>
+<li>Java虚拟机栈：线程私有的，它的生命周期与线程相同。虚拟机栈描述的是<b>Java方法执行的线程内存模型</b>:每个方法被执行的时候，Java虚拟机都会同步创建一个栈帧（Stack Frame）用于存储<b>局部变量表</b>、操作数栈、动态连接、方法出口等信息。每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</li>
+<li>本地方法栈：本地方法栈(Native M ethod Stacks)与虚拟机栈所发挥的作用是非常相似的，其区别只是<b>虚拟机栈为虚拟机执行Java方法(也就是字节码)服务，而本地方法栈则是为虚拟机使用到的本地(Native) 方法服务</b>。</li>
+<li>Java堆(又称”GC堆”, Garbage Collected Heap)：对于Java应用程序来说，Java堆(Java Heap)是虚拟机所管理的内存中最大的一块。Java堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。<b>此内存区域的唯一目的就是存放对象实例，Java 世界里“几乎”所有的对象实例都在这里分配内存。</b>Java堆是垃圾收集器管理的内存区域.</li>
+<li>方法区：各个线程共享的内存区域，它用于存储已被虚拟机加载 的类型信息、常量、静态变量、即时编译器编译后的代码缓存等数据。<b>运行时常量池</b> 是方法区的一部分。Class文件中除了有类的版本、字 段、方法、接口等描述信息外，还有一项信息是常量池表(Constant Pool Table)，用于存放编译期生成的各种字面量与符号引用，这部分内容将在类加载后存放到方法区的运行时常量池中。<font color="red">运行时常量池相对于Class文件常量池的另外一个重要特征是具备动态性，Java语言并不要求常量一定只有编译期才能产生</font>，也就是说，并非预置入Class文件中常量池的内容才能进入方法区运行时常 量池，运行期间也可以将新的常量放入池中，这种特性被开发人员利用得比较多的便是String类的intern()方法。</li>
 </ol>
-</li>
-</ul>
-</li>
-<li><p>使用2D Unet + class weight strategy进行分割的结果分析：</p>
-<ul>
-<li>相比2D Unet + 人为分配标签所占loss权重方法而言，各个标签的分割准确率均有提升</li>
-<li>不需要人为设置class weight，而是让模型根据每一批输入的样本的情况来分配标签所占的loss权重</li>
-<li>问题在于左右冠状动脉的分割效果只有0.6，只提升了5-6个百分点<ol>
-<li>左右冠状动脉分割情况：<ul>
-<li>在远离冠状动脉口的一端，一些细小的分支很容易缺失</li>
-<li>与背景之间对比度不大使得一些不应该被分类成左右冠状动脉的体素被错误分类</li>
-</ul>
-</li>
-<li>其他标签：<ul>
-<li>平均dice在0.78 - 0.95之间，分割效果还可以</li>
-</ul>
-</li>
+<p>总结：</p>
+<blockquote>
+<ol>
+<li>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域,可以分为两大类：线程私有与线程共享。</li>
+<li>栈是运行时的单位，而堆是存储的单位。即：栈解决程序的运行的问题，即程序如何执行，或者说如何处理数据，堆解决的是数据的存储的问题，即，数据怎么放，放在哪儿，（对象是存储在堆中的，方法中的局部变量是保存到栈（栈帧）当中的。局部变量是基本数据类型，对于引用数据类型，保存的还是引用地址）。</li>
+<li>Java堆，又称GC堆，此内存区域的唯一目的就是<b>存放对象实例</b>，Java 世界里“几乎”所有的对象实例都在这里分配内存。</li>
+<li><b>运行时常量池</b> 是方法区的一部分。</li>
 </ol>
-</li>
-</ul>
-</li>
-</ol>
+</blockquote>
 
     </div>
 
@@ -265,7 +247,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90/" rel="tag"># 医学影像实验结果分析</a>
+              <a href="/tags/JVM/" rel="tag"># JVM</a>
           </div>
 
         
@@ -274,13 +256,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/posts/86382637/" rel="prev" title="免密码远端部署Hexo到GitHub（使用SSH Key）">
-      <i class="fa fa-chevron-left"></i> 免密码远端部署Hexo到GitHub（使用SSH Key）
+    <a href="/posts/929892390/" rel="prev" title="回溯算法">
+      <i class="fa fa-chevron-left"></i> 回溯算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/posts/3106381821/" rel="next" title="刷题挑战">
-      刷题挑战 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -339,7 +318,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%B3%E4%BB%8A%E4%B8%BA%E6%AD%A2%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E6%96%B9%E6%B3%95%E6%AF%94%E5%AF%B9"><span class="nav-number">1.</span> <span class="nav-text">至今为止使用的一些方法比对</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Java%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">1.Java编译过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F"><span class="nav-number">2.</span> <span class="nav-text">2. 运行时数据区域</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
