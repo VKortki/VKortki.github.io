@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1.定义给定一个包含 n 个节点的有向图 G，我们给出它的节点编号的一种排列，如果满足：  对于图G中的任意一条有向边（u,v）, u在排列中都出现在v前面。   那么称该排列是图 G 的「拓扑排序」。根据上述的定义，我们可以得出两个结论：  如果图 G 中存在环（即图 G 不是有向无环图），那么图 G 不存在拓扑排序。这是因为假设图中存在环 x1, x2, ..., xn, x1, 那么 x1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拓扑排序算法">
+<meta property="og:url" content="http://example.com/posts/2126864340/index.html">
+<meta property="og:site_name" content="VyacheslavK&#39;s Notes">
+<meta property="og:description" content="1.定义给定一个包含 n 个节点的有向图 G，我们给出它的节点编号的一种排列，如果满足：  对于图G中的任意一条有向边（u,v）, u在排列中都出现在v前面。   那么称该排列是图 G 的「拓扑排序」。根据上述的定义，我们可以得出两个结论：  如果图 G 中存在环（即图 G 不是有向无环图），那么图 G 不存在拓扑排序。这是因为假设图中存在环 x1, x2, ..., xn, x1, 那么 x1">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-12T06:36:22.000Z">
+<meta property="article:modified_time" content="2022-08-12T06:37:47.880Z">
+<meta property="article:author" content="VyacheslavKorotki">
+<meta property="article:tag" content="leetcode刷题">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/posts/2126864340/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>拓扑排序算法 | VyacheslavK's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">VyacheslavK's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/2126864340/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_photo.jpg">
+      <meta itemprop="name" content="VyacheslavKorotki">
+      <meta itemprop="description" content="记录学习的过程">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VyacheslavK's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          拓扑排序算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-12 14:36:22 / 修改时间：14:37:47" itemprop="dateCreated datePublished" datetime="2022-08-12T14:36:22+08:00">2022-08-12</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h4><p>给定一个包含 <code>n</code> 个节点的有向图 <code>G</code>，我们给出它的节点编号的一种排列，如果满足：</p>
+<blockquote>
+<p>对于图G中的任意一条有向边（u,v）, u在排列中都出现在v前面。 </p>
+</blockquote>
+<p>那么称该排列是图 <code>G</code> 的「拓扑排序」。根据上述的定义，我们可以得出两个结论：</p>
+<ul>
+<li>如果图 <code>G</code> 中存在环（即图 <code>G</code> 不是有向无环图），那么图 <code>G</code> 不存在拓扑排序。这是因为假设图中存在环 <code>x1, x2, ..., xn, x1</code>, 那么 <code>x1</code> 在排列中必须出现在 <code>xn</code> 的前面，但 <code>xn</code> 同时必须出现在 <code>x1</code> 的前面，因此不存在一个满足要求的排列，也就不存在拓扑排序。</li>
+<li>如果图 <code>G</code> 是有向无环图，那么它的拓扑排序可能不止一种。举一个最极端的例子，如果图 <code>G</code> 中包含 <code>n</code> 个节点却没有任何边，那么任意一种编号的排列都可以作为拓扑排序。<span id="more"></span></li>
+</ul>
+<h4 id="2-例题"><a href="#2-例题" class="headerlink" title="2.例题"></a>2.例题</h4><ol>
+<li><p>课程表II</p>
+<ul>
+<li><p>题目描述：</p>
+<p>现在你总共有 numCourses 门课需要选，记为 0 到 numCourses - 1。给你一个数组 prerequisites ，其中 prerequisites[i] = [ai, bi] ，表示在选修课程 ai 前 必须 先选修 bi 。</p>
+<p>例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示：[0,1] 。<br>返回你为了学完所有课程所安排的学习顺序。可能会有多个正确的顺序，你只要返回 任意一种 就可以了。如果不可能完成所有课程，返回 一个空数组 。</p>
+</li>
+<li><p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">输入：numCourses = 2, prerequisites = [[1,0]]</span><br><span class="line">输出：[0,1]</span><br><span class="line">解释：总共有 2 门课程。要学习课程 1，你需要先完成课程 0。因此，正确的课程顺序为 [0,1] 。</span><br><span class="line"></span><br><span class="line">输入：numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]</span><br><span class="line">输出：[0,2,1,3]</span><br><span class="line">解释：总共有 4 门课程。要学习课程 3，你应该先完成课程 1 和课程 2。并且课程 1 和课程 2 都应该排在课程 0 之后。</span><br><span class="line">因此，一个正确的课程顺序是 [0,1,2,3] 。另一个正确的排序是 [0,2,1,3] 。</span><br><span class="line"></span><br><span class="line">输入：numCourses = 1, prerequisites = []</span><br><span class="line">输出：[0]</span><br></pre></td></tr></table></figure></li>
+<li><p>思路解析：</p>
+<p>本题是一道经典的「拓扑排序」问题:</p>
+<ul>
+<li><p>我们将每一门课看成一个节点；</p>
+</li>
+<li><p>如果想要学习课程 A 之前必须完成课程 BB，那么我们从 B 到 A 连接一条有向边。这样以来，在拓扑排序中，B 一定出现在 A 的前面。</p>
+</li>
+</ul>
+<p>求出该图的拓扑排序，就可以得到一种符合要求的课程学习顺序。下面介绍两种求解拓扑排序的方法。</p>
+<ul>
+<li><p>方法一：深度优先搜索</p>
+<p>我们可以将深度优先搜索的流程与拓扑排序的求解联系起来，用一个栈来存储所有<strong>已经搜索完成的节点</strong>。</p>
+<blockquote>
+<p>对于一个节点 u，如果它的所有相邻节点都已经搜索完成，那么在搜索回溯到 u 的时候，u 本身也会变成一个已经搜索完成的节点。这里的「相邻节点」指的是从 u 出发通过一条有向边可以到达的所有节点。</p>
+</blockquote>
+<p>假设我们当前搜索到了节点 u，如果它的所有相邻节点都已经搜索完成，那么这些节点都已经在栈中了，此时我们就可以把 u 入栈。可以发现，如果我们从栈顶往栈底的顺序看，由于 u 处于栈顶的位置，那么 u 出现在所有 u 的相邻节点的前面。因此对于 u 这个节点而言，它是满足拓扑排序的要求的。</p>
+<p>这样以来，我们对图进行一遍深度优先搜索。当每个节点进行回溯的时候，我们把该节点放入栈中。最终从栈顶到栈底的序列就是一种拓扑排序。</p>
+<ul>
+<li><p>算法：</p>
+<p>对于图中的任意一个节点，它在搜索的过程中有三种状态，即：</p>
+<ul>
+<li><p>「未搜索」：我们还没有搜索到这个节点；</p>
+</li>
+<li><p>「搜索中」：我们搜索过这个节点，但还没有回溯到该节点，即该节点还没有入栈，还有相邻的节点没有搜索完成）；</p>
+</li>
+<li><p>「已完成」：我们搜索过并且回溯过这个节点，即该节点已经入栈，并且所有该节点的相邻节点都出现在栈的更底部的位置，满足拓扑排序的要求。</p>
+</li>
+</ul>
+<p>通过上述的三种状态，我们就可以给出使用深度优先搜索得到拓扑排序的算法流程，在每一轮的搜索搜索开始时，我们任取一个「未搜索」的节点开始进行深度优先搜索。</p>
+<ul>
+<li><p>我们将当前搜索的节点 u 标记为「搜索中」，遍历该节点的每一个相邻节点 v：</p>
+<ul>
+<li><p>如果 v 为「未搜索」，那么我们开始搜索 v，待搜索完成回溯到 u；</p>
+</li>
+<li><p>如果 v 为「搜索中」，那么我们就找到了图中的一个环，因此是不存在拓扑排序的；</p>
+</li>
+<li><p>如果 v 为「已完成」，那么说明 v 已经在栈中了，而 u 还不在栈中，因此 u 无论何时入栈都不会影响到 (u, v)(u,v) 之前的拓扑关系，以及不用进行任何操作。</p>
+</li>
+</ul>
+</li>
+<li><p>当 u 的所有相邻节点都为「已完成」时，我们将 u 放入栈中，并将其标记为「已完成」。</p>
+</li>
+</ul>
+<p>在整个深度优先搜索的过程结束后，如果我们没有找到图中的环，那么栈中存储这所有的 n 个节点，从栈顶到栈底的顺序即为一种拓扑排序。</p>
+</li>
+<li><p>代码实现思路</p>
+<ol>
+<li>如何存储有向图？已知节点为<code>0,1,...,numCourses-1</code>，可以用<code>List&lt;List&lt;Integer&gt;&gt; edge</code>来存储边，<code>edge.get(i)</code>获取<code>i</code>节点能指向的节点，也就形成了有向边。这样，<code>0,...,numCourses-1</code>代表了不同的节点，而它们的边信息则存储在<code>List&lt;List&lt;Integer&gt;&gt; edge</code>中。可变长数组方便根据<code>prerequisites</code>构建有向图。</li>
+<li>如何实现栈？因为节点的数量已经是确定的，可以使用<code>int[] result</code>数组来当做栈，<code>n-1</code>代表栈底，<code>0</code>代表栈顶。</li>
+<li>节点的三种状态分别用0(未搜索),1(搜索中),2(已完成)来表示，因而每个节点的状态可以用数组<code>int[] visited</code>来存储。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="comment">// 存储有向图</span></span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; edges;</span><br><span class="line">    <span class="comment">// 标记每个节点的状态：0=未搜索，1=搜索中，2=已完成</span></span><br><span class="line">    <span class="type">int</span>[] visited;</span><br><span class="line">    <span class="comment">// 用数组来模拟栈，下标 n-1 为栈底，0 为栈顶</span></span><br><span class="line">    <span class="type">int</span>[] result;</span><br><span class="line">    <span class="comment">// 判断有向图中是否有环</span></span><br><span class="line">    <span class="type">boolean</span> <span class="variable">valid</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="comment">// 栈下标</span></span><br><span class="line">    <span class="type">int</span> index;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] findOrder(<span class="type">int</span> numCourses, <span class="type">int</span>[][] prerequisites) &#123;</span><br><span class="line">        visited = <span class="keyword">new</span> <span class="title class_">int</span>[numCourses];</span><br><span class="line">        result = <span class="keyword">new</span> <span class="title class_">int</span>[numCourses];</span><br><span class="line">        index = numCourses-<span class="number">1</span>;</span><br><span class="line">        edges = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;List&lt;Integer&gt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i &lt; numCourses; i++)&#123;</span><br><span class="line">            edges.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将边的信息存储入edge</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span>[] temp:prerequisites)&#123;</span><br><span class="line">            edges.get(temp[<span class="number">1</span>]).add(temp[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 遍历每一个节点，构建栈</span></span><br><span class="line">        <span class="comment">// 如果有环，停止遍历 </span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i &lt; numCourses &amp;&amp; valid; i++)&#123;</span><br><span class="line">            dfs(i);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (valid)&#123;</span><br><span class="line">        		<span class="comment">// 输出拓扑排序</span></span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 如果有环，则返回空数组</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> u)</span> &#123;</span><br><span class="line">        <span class="comment">// 判断节点是否已完成</span></span><br><span class="line">        <span class="keyword">if</span> (visited[u]==<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将节点标记为搜索中</span></span><br><span class="line">        visited[u] = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 遍历所有相邻节点</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> neighbor:edges.get(u))&#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[neighbor] == <span class="number">1</span>)&#123;</span><br><span class="line">                <span class="comment">// 相邻节点正在搜索中，有环，无法找到拓扑排序</span></span><br><span class="line">                valid = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 深度优先搜索</span></span><br><span class="line">                dfs(neighbor);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 遍历完所有相邻节点后，将节点入栈，并标记为已完成</span></span><br><span class="line">        result[index--] = u;</span><br><span class="line">        visited[u] = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>课程表</p>
+<ul>
+<li><p>题目描述：</p>
+<p>你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。</p>
+<p>在选修某些课程之前需要一些先修课程。 先修课程按数组 prerequisites 给出，其中 prerequisites[i] = [ai, bi] ，表示如果要学习课程 ai 则 必须 先学习课程  bi 。</p>
+<p>例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。<br>请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。</p>
+</li>
+<li><p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：numCourses = 2, prerequisites = [[1,0]]</span><br><span class="line">输出：true</span><br><span class="line">解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。</span><br><span class="line"></span><br><span class="line">输入：numCourses = 2, prerequisites = [[1,0],[0,1]]</span><br><span class="line">输出：false</span><br><span class="line">解释：总共有 2 门课程。学习课程 1 之前，你需要先完成课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。</span><br></pre></td></tr></table></figure></li>
+<li><p>思路：</p>
+<p>我们可以将本题建模成一个求拓扑排序的问题：</p>
+<p>我们将每一门课看成一个节点；</p>
+<p>如果想要学习课程 A 之前必须完成课程 B，那么我们从 B 到 A 连接一条有向边。这样以来，在拓扑排序中，B 一定出现在 A 的前面。</p>
+<p>求出该图是否存在拓扑排序，就可以判断是否有一种符合要求的课程学习顺序。事实上，由于求出一种拓扑排序方法的最优时间复杂度为 O(n+m)，其中 n 和 m 分别是有向图 G 的节点数和边数，方法见 210. 课程表 II 的官方题解。而判断图 G 是否存在拓扑排序，至少也要对其进行一次完整的遍历，时间复杂度也为 O(n+m)。因此不可能存在一种仅判断图是否存在拓扑排序的方法，它的时间复杂度在渐进意义上严格优于 O(n+m)。这样一来，我们使用和 210. 课程表 II 完全相同的方法，但无需使用数据结构记录实际的拓扑排序。为了叙述的完整性，下面的两种方法与 210. 课程表 II 的官方题解 完全相同，但在「算法」部分后的「优化」部分说明了如何省去对应的数据结构。</p>
+</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/leetcode%E5%88%B7%E9%A2%98/" rel="tag"># leetcode刷题</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2341131850/" rel="prev" title="python网络爬虫之爬虫基础（下）">
+      <i class="fa fa-chevron-left"></i> python网络爬虫之爬虫基础（下）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">1.定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%BE%8B%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">2.例题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VyacheslavKorotki"
+      src="/images/head_photo.jpg">
+  <p class="site-author-name" itemprop="name">VyacheslavKorotki</p>
+  <div class="site-description" itemprop="description">记录学习的过程</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VyacheslavKorotki</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
