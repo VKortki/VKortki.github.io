@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="案例描述：  邓老师是夜曲中学初一年级的年级主任，上个月期末考试后，他收集了4个班：文科（语文+英语），理科（数学+物理）的考试成绩。 他打算通过分析月考的情况，制定下个月的教学策略。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据可视化入门">
+<meta property="og:url" content="http://example.com/posts/859299427/index.html">
+<meta property="og:site_name" content="VyacheslavK&#39;s Notes">
+<meta property="og:description" content="案例描述：  邓老师是夜曲中学初一年级的年级主任，上个月期末考试后，他收集了4个班：文科（语文+英语），理科（数学+物理）的考试成绩。 他打算通过分析月考的情况，制定下个月的教学策略。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/posts/859299427/2020-12-28.png">
+<meta property="og:image" content="http://example.com/posts/859299427/DinoSequentialSmaller.gif">
+<meta property="og:image" content="http://example.com/posts/859299427/2020-12-25.png">
+<meta property="og:image" content="http://example.com/posts/859299427/z4bPhFGB8PFIrO3n__thumbnail.png">
+<meta property="og:image" content="http://example.com/posts/859299427/gIfrKUOQnoPbxc11__thumbnail-20220822013843468.png">
+<meta property="og:image" content="http://example.com/posts/859299427/WYuZJ2TpfMJtlyQB__thumbnail.png">
+<meta property="og:image" content="http://example.com/posts/859299427/ojUhANCTjvcBfgTM__thumbnail.png">
+<meta property="og:image" content="http://example.com/posts/859299427/2020-11-27.png">
+<meta property="og:image" content="http://example.com/posts/859299427/class15-40-2.png">
+<meta property="og:image" content="http://example.com/posts/859299427/new.gif">
+<meta property="og:image" content="http://example.com/posts/859299427/2020-12-1518.00.00-20220822014652485.png">
+<meta property="og:image" content="http://example.com/posts/859299427/2020-12-2511.25.32.png">
+<meta property="article:published_time" content="2022-08-22T15:04:56.000Z">
+<meta property="article:modified_time" content="2022-08-22T15:12:19.092Z">
+<meta property="article:author" content="VyacheslavKorotki">
+<meta property="article:tag" content="python数据可视化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/posts/859299427/2020-12-28.png">
+
+<link rel="canonical" href="http://example.com/posts/859299427/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据可视化入门 | VyacheslavK's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">VyacheslavK's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/859299427/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_photo.jpg">
+      <meta itemprop="name" content="VyacheslavKorotki">
+      <meta itemprop="description" content="记录学习的过程">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VyacheslavK's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据可视化入门
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-22 23:04:56 / 修改时间：23:12:19" itemprop="dateCreated datePublished" datetime="2022-08-22T23:04:56+08:00">2022-08-22</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>案例描述：</p>
+<ul>
+<li><p>邓老师是夜曲中学初一年级的年级主任，上个月期末考试后，他收集了4个班：文科（语文+英语），理科（数学+物理）的考试成绩。</p>
+<p>他打算通过分析月考的情况，制定下个月的教学策略。</p>
+<p><img src="/posts/859299427/2020-12-28.png" alt="img"></p>
+<span id="more"></span></li>
+<li><p>总分和平均分</p>
+<p>根据以往的经验，他先计算各个班的总分和平均分，了解各班成绩的总体情况。</p>
+<p>非常巧合的是：每个班语文+英语的总分都是990，平均分为90.00。</p>
+<p>数学+物理的总分约为825.1，平均分约为75.01。那是不是这4个班的成绩就差不多了呢？</p>
+</li>
+<li><p>波动情况</p>
+<p>邓老师正纳闷，旁边的唐老师见状，凑近一看说：“邓老师，你这个方法会有误差哦。”</p>
+<p>“虽然各个班的平均分差不多，但很可能情况不一样：比如有的班成绩特别好和成绩特别差的都比较多，波动很大。有的班成绩都比较平均，差距不大。</p>
+<p>这样两个班的情况就会非常不同了，教学策略也会不一样。”</p>
+<p>“那我要怎么计算成绩的波动呢？”邓老师很好奇。</p>
+<p>“其实你可以用<a target="_blank" rel="noopener" href="https://www.shuxuele.com/data/standard-deviation.html">标准差</a>来计算成绩的波动幅度，标准差的值越高说明成绩波动越大。”唐老师建议到。</p>
+</li>
+<li><p>邓老师在唐老师的建议下，计算出了各个班的标准差，却吃惊地发现：</p>
+<p>咦？各个班的文科成绩和理科成绩的标准差竟然也差不多。看来各个班的成绩波动也都是相似的。</p>
+</li>
+<li><p>邓老师还有一个猜测：会不会这几个班成绩差不多，但是偏科比较严重呢？比如有的班文科成绩特别好，理科成绩特别不好。</p>
+<p>张老师路过，听到了他们的讨论，忍不住说：“试试计算一下<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0/3109424?fr=aladdin">相关系数</a>呢，如果相关系数越高，说明文科成绩和理科成绩的关联度比较高，也就是文科成绩好，理科成绩也比较好，如果相关系数很低，那就可能是偏科很严重，文科成绩好但理科成绩很差。”</p>
+</li>
+<li><p>邓老师经过一通计算，又得出一个非常震惊的结果：</p>
+<p>每个班级文科（语文+英语）和理科（数学+物理）的相关系数都是0.82。</p>
+<p>不仅不偏科，水平几乎完全一样。</p>
+</li>
+<li><p>有了这几份统计学数据作支撑，邓老师立即决定下个月1,2,3,4班的都设定相同的教学提升计划。</p>
+<p>教学总监看到这份计划，有些疑惑，建议邓老师将学生成绩画出图表来仔细分析。没想到，图表显示的结果。。。。。完全不相同！</p>
+<p>1班的成绩比较分散，有波动。</p>
+<p>2班成绩分布呈抛物线趋势。</p>
+<p>3班成绩几乎都是线性分布，有一位同学的文科成绩非常高。</p>
+<p>而4班的成绩更为神奇，10位同学的文科成绩几乎都相同，只有一位同学特别出类拔萃。</p>
+<p>幸好通过图表发现了数据的异常，如果只是迷信数据分析的结果，给出的教学计划显然是不合理的。</p>
+</li>
+<li><p>安斯科姆四重奏</p>
+<p>其实刚刚那组数据并不是邓老师统计的，而是统计学家弗朗西斯·安斯库姆（Francis Anscombe），在1973年构造的。</p>
+<p>这位统计学家在和数据打了很多年交道后发现，仅仅依赖概括性统计度量，可能具有误导性，而挖掘数据的视觉模式，趋势和异常值反而更加重要。</p>
+<p>于是构造了这组统计特性一致，绘制出的图表则截然不同的数据，让大家了解数据可视化的重要性。</p>
+</li>
+<li><p>彩蛋</p>
+<p>除此之外，美国迈阿密大学教授Alberto Cairo也曾构造了一组统计学意义上相同，画出来的图表完全不同的<a target="_blank" rel="noopener" href="https://www.autodesk.com/research/publications/same-stats-different-graphs">数据</a>，如图所示，是不是很神奇呢？</p>
+<p><img src="/posts/859299427/DinoSequentialSmaller.gif" alt="img"></p>
+</li>
+</ul>
+<p>选择图表</p>
+<ul>
+<li><p>数据可视化如此重要，学会制作严谨而科学的图表就显得非常重要了。</p>
+<p>今天咱们先迈出数据可视化的第一步：选择图表。</p>
+<p>在不同的场景中，我们所得到的数据不同，想要获取的信息不同，所以选择的图表也不同。</p>
+<p>根据数据关系图表可以分为：比较、趋势、构成、联系四种类型。</p>
+<p>接下来我们将针对这四种类型的数据关系，来介绍每种关系下常见的图表类型。</p>
+<p><img src="/posts/859299427/2020-12-25.png" alt="img"></p>
+</li>
+</ul>
+<p>比较-柱状图</p>
+<ul>
+<li><p>定义：柱状图，又称长条图、柱形图，是一种以长方形的长度为变量的统计图表。</p>
+</li>
+<li><p>应用：柱状图能够反应数据间的差异，一般用来进行分类项目间的比较。</p>
+<p>注意：柱状图仅适用于中小规模数据集，超过10个就不建议使用哦。</p>
+<p><img src="/posts/859299427/z4bPhFGB8PFIrO3n__thumbnail.png" alt="img"></p>
+</li>
+</ul>
+<p>比较—条形图</p>
+<ul>
+<li><p>定义：条形图（bar chart）简单来说就是横着排列的柱状图。</p>
+</li>
+<li><p>应用：条形图和柱状图都可以进行数据间的比较，不过当数据较多，比如超过10项时，需要使用条形图。</p>
+<p>例如：2020年全球30个国家的GDP对比。</p>
+<p><img src="/posts/859299427/gIfrKUOQnoPbxc11__thumbnail-20220822013843468.png" alt="img"></p>
+</li>
+</ul>
+<p>趋势-折线图</p>
+<ul>
+<li><p>定义：以折线的上升或下降来表示统计数量的增减变化的统计图,叫作折线统计图。</p>
+<p>应用：折线图可以显示随时间而变化的连续数据，非常适用于显示在相等时间间隔下数据的趋势。</p>
+<p><img src="/posts/859299427/WYuZJ2TpfMJtlyQB__thumbnail.png" alt="img"></p>
+</li>
+</ul>
+<p>趋势—平滑折线图</p>
+<ul>
+<li>定义：平滑折线图是显示随时间而变化的连续数据，主要用于反应数据的整体趋势。</li>
+<li>应用：如果时间跨度大或者数据波动比较大时，可以使用平滑折线图，因为此时使用折线图显得较乱，光滑折线图则比较清晰。</li>
+<li><img src="/posts/859299427/ojUhANCTjvcBfgTM__thumbnail.png" alt="img"></li>
+</ul>
+<p>构成—饼图</p>
+<ul>
+<li><p>定义：饼图，是一个划分为几个扇形的圆形统计图表，用于描述量、频率或百分比之间的相对关系。</p>
+</li>
+<li><p>应用：在需要描述某一部分占总体的百分比时，适合使用饼图。</p>
+<p>例如：占据公司全部资金一半的两个渠道；某公司员工的男女比例等。</p>
+<p><img src="/posts/859299427/2020-11-27.png" alt="img"></p>
+</li>
+</ul>
+<p>散点图</p>
+<ul>
+<li><p>定义： 散点图也叫 X-Y图，它将所有的数据以点的形式展现在直角坐标系上，以显示变量之间的相互影响程度，点的位置由变量的数值决定。</p>
+</li>
+<li><p>应用：分析坐标点的分布情况，判断两个变量（数据）之间的关联或分布趋势。</p>
+<p>例如：体重和身高的关系，GDP与房价的关系。</p>
+<p><img src="/posts/859299427/class15-40-2.png" alt="img"></p>
+</li>
+</ul>
+<p>联系—气泡图</p>
+<ul>
+<li>定义：气泡图通常是用来表述三个数据之间的关系，或者同时呈现三维数据。简单来说就是在散点图的基础上加上散点大小这个维度来进行比较。</li>
+<li>应用：例如统计学家汉斯.罗林在Ted演讲中用到的这个图，展示了200个国家：人均收入、寿命、人口。气泡基本分布在一条斜线上，人均收入和寿命有一定相关性。</li>
+<li><img src="/posts/859299427/new.gif" alt="img"></li>
+</ul>
+<p>应用场景总结</p>
+<ul>
+<li><p>分类比较：柱状图</p>
+</li>
+<li><p>变化趋势：折线图</p>
+</li>
+<li><p>总体构成：饼图</p>
+</li>
+<li><p>相关关系：散点图</p>
+</li>
+<li><p>更多的图表类型</p>
+<p>除此之外，还有很多不同的图表类型，比如：</p>
+<p>地理位置：地图<br>流量分布：桑基图<br>关系：关系图<br>部分与整体：漏斗图</p>
+<p>我们会在后面的课程中继续学习。</p>
+</li>
+</ul>
+<p>Why pyecharts</p>
+<ul>
+<li><p>在Python中可以用于制作图表的模块非常多，我们选择使用pyecharts，因为 :</p>
+<ol>
+<li><p>API设计简洁，使用简单</p>
+</li>
+<li><p>有30+常见的交互式图表，配置灵活，图表精美</p>
+</li>
+<li><p>多达400+地图文件以及原生的百度地图，为地理数据可视化提供强有力的支持</p>
+</li>
+<li><p>模块更新频率高，使我们可以用上最新的特性和图表</p>
+<p><img src="/posts/859299427/2020-12-1518.00.00-20220822014652485.png" alt="img"></p>
+</li>
+</ol>
+</li>
+</ul>
+<p><img src="/posts/859299427/2020-12-2511.25.32.png" alt="img"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag"># python数据可视化</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/1726962663/" rel="prev" title="便利店的销售数据分析">
+      <i class="fa fa-chevron-left"></i> 便利店的销售数据分析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/3058949644/" rel="next" title="Nginx安装与启动">
+      Nginx安装与启动 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VyacheslavKorotki"
+      src="/images/head_photo.jpg">
+  <p class="site-author-name" itemprop="name">VyacheslavKorotki</p>
+  <div class="site-description" itemprop="description">记录学习的过程</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VyacheslavKorotki</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

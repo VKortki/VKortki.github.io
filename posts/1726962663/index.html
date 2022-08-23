@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1.数据分析的流程  提出问题 提出问题，也就是明确需求和目的。 从俊俊的想法中不难发现，我们需要解决两个问题，分别是： 找出影响便利店销量的因素，并给出对应的提升策略。 根据过往经验，俊俊认为可以从以下三个角度出发，分析便利店销售数据，找出影响销量的因素：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="便利店的销售数据分析">
+<meta property="og:url" content="http://example.com/posts/1726962663/index.html">
+<meta property="og:site_name" content="VyacheslavK&#39;s Notes">
+<meta property="og:description" content="1.数据分析的流程  提出问题 提出问题，也就是明确需求和目的。 从俊俊的想法中不难发现，我们需要解决两个问题，分别是： 找出影响便利店销量的因素，并给出对应的提升策略。 根据过往经验，俊俊认为可以从以下三个角度出发，分析便利店销售数据，找出影响销量的因素：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/posts/1726962663/P2.png">
+<meta property="og:image" content="http://example.com/posts/1726962663/1-13.png">
+<meta property="og:image" content="http://example.com/posts/1726962663/figure_1.png">
+<meta property="og:image" content="http://example.com/posts/1726962663/p30-20220822224215822.png">
+<meta property="og:image" content="http://example.com/posts/1726962663/figure_2.png">
+<meta property="og:image" content="http://example.com/posts/1726962663/%E4%BE%BF%E5%88%A9%E5%BA%97%E7%9A%84%E9%94%80%E5%94%AE%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90.png">
+<meta property="article:published_time" content="2022-08-22T14:56:29.000Z">
+<meta property="article:modified_time" content="2022-08-22T15:02:25.324Z">
+<meta property="article:author" content="VyacheslavKorotki">
+<meta property="article:tag" content="python数据分析进阶">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/posts/1726962663/P2.png">
+
+<link rel="canonical" href="http://example.com/posts/1726962663/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>便利店的销售数据分析 | VyacheslavK's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">VyacheslavK's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/1726962663/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_photo.jpg">
+      <meta itemprop="name" content="VyacheslavKorotki">
+      <meta itemprop="description" content="记录学习的过程">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VyacheslavK's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          便利店的销售数据分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-22 22:56:29 / 修改时间：23:02:25" itemprop="dateCreated datePublished" datetime="2022-08-22T22:56:29+08:00">2022-08-22</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="1-数据分析的流程"><a href="#1-数据分析的流程" class="headerlink" title="1.数据分析的流程"></a>1.数据分析的流程</h4><p><img src="/posts/1726962663/P2.png" alt="img"></p>
+<ol>
+<li><p>提出问题</p>
+<p>提出问题，也就是明确需求和目的。</p>
+<p>从俊俊的想法中不难发现，我们需要解决两个问题，分别是：</p>
+<p>找出影响便利店销量的因素，并给出对应的提升策略。</p>
+<p>根据过往经验，俊俊认为可以从以下三个角度出发，分析便利店销售数据，找出影响销量的因素：</p>
+<span id="more"></span>
+<ol>
+<li><p>销售情况，比如销售额的变化趋势，市场布局；</p>
+</li>
+<li><p>商品情况，比如商品的结构；</p>
+</li>
+<li><p>用户情况，比如下单行为。</p>
+</li>
+</ol>
+</li>
+<li><p>收集数据</p>
+<p>明确目标后，就可以从目标入手，确定需要哪些数据，获得进行分析的数据集。</p>
+<p>俊俊的猜想聚焦于销售情况、商品、用户这三个维度，所以可以从这三个维度来收集订单数据。</p>
+<p>俊俊从数据库里获取了2018年1月1日到2021年12月30日，这四年内「便利店的销售数据」，包含下单日期、商品类别、销售额等信息。</p>
+<p>该数据集是一个CSV文件，存储在”/Users/junjun/store.csv”路径下。</p>
+<p>图中展示了该数据集的一小部分，除了标题行外，其他每一行就是一条订单数据。</p>
+</li>
+<li><p>数据处理和清洗</p>
+<p>获取并读取数据集后，在开展进一步分析前，我们还需要<font color="red">对数据的质量进行检查和处理</font>。</p>
+<p>也就是先识别并清洗数据集中的脏数据，然后再看是否需要对数据进行处理，比如转换数据类型等操作。</p>
+<ul>
+<li><p>识别并清洗数据的流程是：</p>
+<ol>
+<li><p>识别并处理缺失值</p>
+<p>在pandas中，检查缺失值可以通过<code>info()</code>函数。</p>
+<p>我们只用关注该函数返回的数据总行数和各列非空数据的数量即可。</p>
+<p>﻿观察输出：</p>
+<p>这份数据集的总行数为9935；</p>
+<p>订单量和销售额这两列的非空数据都小于数据总行数；</p>
+<p>说明存在少量缺失值。</p>
+<p>由于缺失值数量较少，我们选择直接删除掉包含缺失值的行数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用import导入pandas模块，简称为pd</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;读取文件&#x27;&#x27;&#x27;</span></span><br><span class="line">data = pd.read_csv(<span class="string">&quot;/Users/junjun/store.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;数据的处理与清洗&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># 1. 1. 识别并处理缺失值</span></span><br><span class="line"><span class="comment"># TODO 使用布尔索引和isnull()函数，将&quot;订单量&quot;的缺失值筛选出，赋值给变量quanNull</span></span><br><span class="line">quanNull = data[data[<span class="string">&quot;订单量&quot;</span>].isnull()]</span><br><span class="line"></span><br><span class="line"><span class="comment"># TODO 使用drop()函数，将包含所有&quot;订单量&quot;这一列缺失值的行删除</span></span><br><span class="line">data.drop(index=quanNull.index, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># TODO 使用info()函数，快速浏览数据集</span></span><br><span class="line">data.info()</span><br></pre></td></tr></table></figure></li>
+<li><p>识别并处理异常值</p>
+<p>接下来进行数据清洗的第二步：识别并处理异常值。</p>
+<p>有一个快速识别数据集中是否存在异常值的方法，就是使用描述函数 —— <code>describe()</code>。</p>
+<p>输出结果中，很多数字后面都有 e+01、e+09、… 之类的后缀，这是一种科学计数法，代表10的n次方。</p>
+<p>现在重点观察下这两列的最小值（min）和最大值（max），我们可以发现以下2个异常情况：</p>
+<p>1）订单量的最小值几乎是 0</p>
+<p>在实际业务中，不可能出现订单量为 0 的情况。</p>
+<p>2）订单量的最大值几乎是 10 的九次方</p>
+<p>﻿俊俊的便利店明显无法处理10 个亿的订单量。</p>
+<p><img src="/posts/1726962663/1-13.png" alt="img"></p>
+<p>这两种数据均属于异常值，会影响分析结果的准确性，所以我们抽取合理范围内的数据，将异常值过滤掉。</p>
+<p>处理异常值非常简单，我们只需通过<code>布尔索引</code>，将订单量这一列值里大于0，以及小于100000000（1.000000e+09）的数据筛选出来，重新赋值给data即可。</p>
+<p>完成后，再次通过<code>describe()</code>函数查看筛选后的描述性信息。</p>
+<p>可以看到，订单量目前的范围在1至2000之间，是一个较合理的订单量范围，不需要再进行数据筛选。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用import导入pandas模块，简称为pd</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;读取文件&#x27;&#x27;&#x27;</span></span><br><span class="line">data = pd.read_csv(<span class="string">&quot;/Users/junjun/store.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;数据的处理与清洗&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># 1. 识别并处理缺失值</span></span><br><span class="line">quanNull= data[data[<span class="string">&quot;订单量&quot;</span>].isnull()]</span><br><span class="line">data.drop(index=quanNull.index, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 识别并处理异常值</span></span><br><span class="line"><span class="comment"># TODO 使用布尔索引筛选出&quot;订单量&quot;这一列值里大于0且小于100000000的数据</span></span><br><span class="line">data = data[(data[<span class="string">&quot;订单量&quot;</span>]&gt;<span class="number">0</span>) &amp; (data[<span class="string">&quot;订单量&quot;</span>]&lt;<span class="number">100000000</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># TODO 查看data的描述性统计信息</span></span><br><span class="line"><span class="built_in">print</span>(data.describe())</span><br></pre></td></tr></table></figure></li>
+<li><p>识别并处理重复值</p>
+<p>﻿最后，脏数据中还有一种情况，属于重复值。</p>
+<p>﻿pandas模块中的<code>duplicated()</code>函数专门用于判断DataFrame对象中是否存在重复数据。</p>
+<p>我们可以将布尔索引和该函数结合起来，查看 data 中重复的行。</p>
+<p>最后使用print()输出的是一个Empty DataFrame，代表是一个空DataFrame，说明没有重复的行，因此不需要处理。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用import导入pandas模块，简称为pd</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;读取文件&#x27;&#x27;&#x27;</span></span><br><span class="line">data = pd.read_csv(<span class="string">&quot;/Users/junjun/store.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;数据的处理与清洗&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># 1. 识别并处理缺失值</span></span><br><span class="line">quanNull= data[data[<span class="string">&quot;订单量&quot;</span>].isnull()]</span><br><span class="line">data.drop(index=quanNull.index, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 识别并处理异常值</span></span><br><span class="line">data = data[(data[<span class="string">&quot;订单量&quot;</span>]&gt;<span class="number">0</span>) &amp; (data[<span class="string">&quot;订单量&quot;</span>]&lt;<span class="number">100000000</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 识别并处理重复值</span></span><br><span class="line"><span class="comment"># 使用布尔索引和duplicated()函数，将data中重复的行筛选出来</span></span><br><span class="line">dup = data[data.duplicated()]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(dup)</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>数据处理</p>
+<p>将脏数据清理完毕后，接下来还需要进行数据预处理。</p>
+<p>在数据分析基础课中，我们见过最多的处理，就是把数据集里与日期有关的某列数据从字符串转为时间类型。</p>
+<p>这是因为存放在CSV文件中的时间大都是字符串类型，不利于后续对其进行时间类型的处理。</p>
+<ol>
+<li><p>字符串转时间</p>
+<p>我们可以使用<code>pd.to_datetime()</code>函数，批量将DataFrame中的数据转换为datatime类型。</p>
+<p>俊俊获取到的数据集中，只有”订单日期”这一列是需要进行转换的。</p>
+<p>我们将这一列转换后的结果输出查看，可以看到已经成功转换为datetime类型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用import导入pandas模块，简称为pd</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;读取文件&#x27;&#x27;&#x27;</span></span><br><span class="line">data = pd.read_csv(<span class="string">&quot;/Users/junjun/store.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;数据的处理与清洗&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># 1. 识别并处理缺失值</span></span><br><span class="line">quanNull= data[data[<span class="string">&quot;订单量&quot;</span>].isnull()]</span><br><span class="line">data.drop(index=quanNull.index, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 识别并处理异常值</span></span><br><span class="line">data = data[(data[<span class="string">&quot;订单量&quot;</span>]&gt;<span class="number">0</span>) &amp; (data[<span class="string">&quot;订单量&quot;</span>]&lt;<span class="number">100000000</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 识别并处理重复值</span></span><br><span class="line">dup = data[data.duplicated()]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 数据类型转换</span></span><br><span class="line"><span class="comment"># TODO 使用pd.to_datetime()函数，将&quot;订单日期&quot;列的数据转化为时间格式</span></span><br><span class="line">data[<span class="string">&quot;订单日期&quot;</span>] = pd.to_datetime(data[<span class="string">&quot;订单日期&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用print()输出data[&quot;订单日期&quot;]</span></span><br><span class="line"><span class="built_in">print</span>(data[<span class="string">&quot;订单日期&quot;</span>])</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>数据分析、可视化、得出结论</p>
+<p>数据清洗并处理好后，就可以进入“数据分析”的阶段了。</p>
+<p>由于图像能更加凸显数据结果，所以数据分析和可视化往往会同时进行。</p>
+<p>接下来，我们就和俊俊一起，从销售、商品和用户这三个角度出发，分析便利店销售数据吧～</p>
+<ul>
+<li><p>分析销售情况</p>
+<p>俊俊打算先从销售情况出发，从时间和地区这两个维度，依次分析销售额的变化趋势，及其变化原因。</p>
+<p>时间维度，就是便利店每年每月的销售额变化，这会分别帮助俊俊了解不同月份的销售情况，找出是否有淡旺季之分。</p>
+<p>地区维度，则是看不同地区销售额的占比，以便对不同区域采取对应的运营策略。</p>
+<ol>
+<li><p>月度销售额分析</p>
+<p>我们先来分析便利店每年每月的销售额变化，了解不同月份的销售情况。</p>
+<p>找出是否有淡旺季之分和重点销售月份，以便制定经营策略。</p>
+<p>为了获取每年的每月销售额，俊俊可以先将便利店销售额按照年份进行分组，再在各个年份的分组中按月重新采样聚合。</p>
+<p>相当于是先分组，然后在各个分组里进行重采样，最后聚合。</p>
+<p>这个思路和我们在<a target="_blank" rel="noopener" href="https://np.baicizhan.com/data_analysis/lesson/22/page/21">数据分析·基础Day22课</a>学到的非常类似～</p>
+<p>可是现在数据中并没有年份信息，所以需要先从”订单日期”里进行提取。</p>
+<p>我们可以使用<code>data[&quot;订单日期&quot;].dt.year</code>获取 “订单日期” 这列数据的年份信息，﻿并将其作为新列添加到data中。</p>
+<p>通过输出可以看到，已在data变量中成功添加了一列年份信息数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用import导入pandas模块，简称为pd</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;读取文件&#x27;&#x27;&#x27;</span></span><br><span class="line">data = pd.read_csv(<span class="string">&quot;/Users/junjun/store.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;数据的处理与清洗&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># 1. 识别并处理缺失值</span></span><br><span class="line">quanNull= data[data[<span class="string">&quot;订单量&quot;</span>].isnull()]</span><br><span class="line">data.drop(index=quanNull.index, inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 2. 识别并处理异常值</span></span><br><span class="line">data = data[(data[<span class="string">&quot;订单量&quot;</span>]&gt;<span class="number">0</span>) &amp; (data[<span class="string">&quot;订单量&quot;</span>]&lt;<span class="number">100000000</span>)]</span><br><span class="line"><span class="comment"># 3. 识别并处理重复值</span></span><br><span class="line">dup = data[data.duplicated()]</span><br><span class="line"><span class="comment"># 4. 数据类型转换</span></span><br><span class="line">data[<span class="string">&quot;订单日期&quot;</span>] = pd.to_datetime(data[<span class="string">&quot;订单日期&quot;</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;销售情况分析&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># 1. 分析不同月份销售情况</span></span><br><span class="line"><span class="comment"># 使用data[&quot;订单日期&quot;].dt.year获取 &quot;订单日期&quot; 这列数据的年</span></span><br><span class="line"><span class="comment"># 并作为data中的新列</span></span><br><span class="line">data[<span class="string">&quot;年份&quot;</span>] = data[<span class="string">&#x27;订单日期&#x27;</span>].dt.year</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出data</span></span><br><span class="line"><span class="built_in">print</span>(data)</span><br></pre></td></tr></table></figure>
+
+<p>还有一点很重要：重采样需要根据时间格式的行索引来进行操作，否则会出现报错。</p>
+<p>因此，为了在处理过程中更加方便，我们通常会把数据中时间格式的列作为行索引index后，再进行重采样。</p>
+<p>本例中，我们可以使用<code>set_index()</code>函数将data[“订单日期”]设置成data变量的行索引index。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用set_index()函数，把&quot;订单日期&quot;列设置为index</span></span><br><span class="line">data = data.set_index(<span class="string">&quot;订单日期&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出data</span></span><br><span class="line"><span class="built_in">print</span>(data)</span><br></pre></td></tr></table></figure></li>
+<li><p>接下来，就可以对销售额完成分组、重采样和聚合操作。</p>
+<p>先对data[“销售额”]使用<code>groupby()</code>函数，按照data[“年份”]进行分组，这样最后的结果里就只会有销售额，不包含其它无关信息，比如订单量等。</p>
+<p>再按月（”M”）进行重采样，最后求和。具体代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用groupby()、resample()和sum()函数</span></span><br><span class="line"><span class="comment"># 计算每年每个月的销售额总和</span></span><br><span class="line"><span class="comment"># 将结果赋值给变量groupByMonth</span></span><br><span class="line">groupByMonth = data[<span class="string">&quot;销售额&quot;</span>].groupby(data[<span class="string">&quot;年份&quot;</span>]).resample(<span class="string">&quot;M&quot;</span>).<span class="built_in">sum</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出groupByMonth</span></span><br><span class="line"><span class="built_in">print</span>(groupByMonth)</span><br></pre></td></tr></table></figure></li>
+<li><p>获取到2018-2021这四年内每个月的销售额后，俊俊希望能将每年对应的销售额绘制成一个折线图，并将四年的折线图都放在一个画布里来展示。</p>
+<p>那我们怎么能通过groupByMonth画出对应的折线图呢？</p>
+<p>我们来观察一下groupByMonth，可以看到，现在的销售额按照年份进行了分组，每年都有每月对应的销售额。</p>
+<p>并且，出现了两层行索引：</p>
+<p>第一层索引是使用groupby()函数时产生的，对应各年份；</p>
+<p>第二层索引是使用resample()函数时产生的，对应各月份。</p>
+<p>![img](image 31.png)</p>
+</li>
+<li><p>我们可以通过<code>.loc</code>属性，访问groupByMonth的多层索引，将每年的数据依次提取出来。</p>
+<p>这样，俊俊就可以依次根据year_2018、year_2019、year_2020和year_2021变量，绘制出对应年份的每月销售额变化趋势。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 依次提取2018、2019、2020和2021对应的销售额数据</span></span><br><span class="line">year_2018 = groupByMonth.loc[<span class="number">2018</span>]</span><br><span class="line">year_2019 = groupByMonth.loc[<span class="number">2019</span>]</span><br><span class="line">year_2020 = groupByMonth.loc[<span class="number">2020</span>]</span><br><span class="line">year_2021 = groupByMonth.loc[<span class="number">2021</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用print()输出变量year_2021</span></span><br><span class="line"><span class="built_in">print</span>(year_2021)</span><br></pre></td></tr></table></figure></li>
+<li><p>示例中，我们已经做了绘图的准备工作。</p>
+<p>为了让图像更利于理解，我们使用 <code>strftime()</code>函数，依次将year_2018、year_2019、year_2020和year_2021的index转换为”月”的格式。</p>
+<p>然后，就可以依次调用4次<code>plt.plot()</code>函数绘制折线图，并传入<code>label</code>参数，设置对应的图例。</p>
+<p>在使用<code>plt.show()</code>展示图像前，通过<code>plt.legend()</code>方法显示图例即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导入matplotlib.pyplot，并使用&quot;plt&quot;作为该模块的简写</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过给 plt.rcParams[&quot;font.sans-serif&quot;] 赋值</span></span><br><span class="line"><span class="comment"># 将字体设置为 Arial Unicode MS </span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>] = <span class="string">&quot;Arial Unicode MS&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 依次将year_2018、year_2019、year_2020和year_2021的index</span></span><br><span class="line"><span class="comment"># 转换为&quot;月&quot;的格式</span></span><br><span class="line">year_2018.index = year_2018.index.strftime(<span class="string">&quot;%m&quot;</span>)</span><br><span class="line">year_2019.index = year_2019.index.strftime(<span class="string">&quot;%m&quot;</span>)</span><br><span class="line">year_2020.index = year_2020.index.strftime(<span class="string">&quot;%m&quot;</span>)</span><br><span class="line">year_2021.index = year_2021.index.strftime(<span class="string">&quot;%m&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用plt.plot()函数</span></span><br><span class="line"><span class="comment"># 以year_2018.index为x轴的值和以year_2018.values为y轴的值</span></span><br><span class="line"><span class="comment"># &quot;2018&quot;作为图例，绘制展现2018年每月销售额的折线图</span></span><br><span class="line">plt.plot(year_2018.index,year_2018.values,label=<span class="string">&quot;2018&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用plt.plot()函数</span></span><br><span class="line"><span class="comment"># 以year_2019.index为x轴的值和以year_2019.values为y轴的值</span></span><br><span class="line"><span class="comment"># &quot;2019&quot;作为图例，绘制展现2019年每月销售额的折线图</span></span><br><span class="line">plt.plot(year_2019.index,year_2019.values,label=<span class="string">&quot;2019&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用plt.plot()函数</span></span><br><span class="line"><span class="comment"># 以year_2020.index为x轴的值和以year_2020.values为y轴的值</span></span><br><span class="line"><span class="comment"># &quot;2020&quot;作为图例，绘制展现2020年每月销售额的折线图</span></span><br><span class="line">plt.plot(year_2020.index,year_2020.values,label=<span class="string">&quot;2020&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用plt.plot()函数</span></span><br><span class="line"><span class="comment"># 以year_2021.index为x轴的值和以year_2021.values为y轴的值</span></span><br><span class="line"><span class="comment"># &quot;2021&quot;作为图例，绘制展现2021年每月销售额的折线图</span></span><br><span class="line">plt.plot(year_2021.index,year_2021.values,label=<span class="string">&quot;2021&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用plt.legend()函数显示图例</span></span><br><span class="line">plt.legend()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用plt.show()函数显示图像</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></li>
+<li><p>通过不同年份月度销售额我们可以看出：</p>
+<p>该便利店2018年-2021年每一年的销售额同比上一年都是上升趋势，销售季节性明显，总体上半年是淡季，下半年是旺季。</p>
+<p>上半年中5月份销售额比较高，下半年中7月份的销售额偏低。</p>
+<p>对于旺季的月份，俊俊可以继续维持运营推广等策略，还可以加大投入，提高整体销售额；而对于淡季的月份，可以结合产品特点进行新产品拓展，举办一些促销活动等吸引客户。</p>
+<p><img src="/posts/1726962663/figure_1.png" alt="img"></p>
+</li>
+<li><p>市场布局分析</p>
+<p>完成时间维度销售额的分析，接下来，俊俊打算分析市场布局。</p>
+<p>他的便利店订单共来自全国6个地区，因此可以看一下不同地区之间的销售情况，以便对不同地区采取对应的经营策略。</p>
+<p><img src="/posts/1726962663/p30-20220822224215822.png" alt="img"></p>
+<ol>
+<li><p>俊俊认为可以通过簇形柱状图，来直观展示2018-2021这四年各地区的销售情况。</p>
+<p>那么我们就需要获取每个地区的每年销售总额。</p>
+<p>按照之前的思路，其实就是先将便利店销售额按照每个地区进行分组，再在各个地区的分组中按年份重新采样聚合。</p>
+<p><img src="/posts/1726962663/figure_2.png" alt="img"></p>
+</li>
+<li><p>我们先来尝试获取每个地区的每年销售总额。</p>
+<p>和之前一样，需要先使用<code>set_index()</code>函数将data[“订单日期”]设置成data变量的行索引index。</p>
+<p>﻿然后，就可以对data[“销售额”]使用<code>groupby()</code>函数，按照data[“地区”]进行分组。</p>
+<p>再按年（”Y”）进行重采样，最后求和。具体代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用groupby()、resample()和sum()函数</span></span><br><span class="line"><span class="comment"># 计算每个地区每年的销售额总和</span></span><br><span class="line"><span class="comment"># 将结果赋值给变量groupByArea</span></span><br><span class="line">groupByArea =data[<span class="string">&quot;销售额&quot;</span>].groupby(data[<span class="string">&#x27;地区&#x27;</span>]).resample(<span class="string">&quot;Y&quot;</span>).<span class="built_in">sum</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出groupByArea</span></span><br><span class="line"><span class="built_in">print</span>(groupByArea)</span><br></pre></td></tr></table></figure></li>
+<li><p>现在我们又得到了一个包含双层索引的DataFrame。</p>
+<p>接下来就可以根据这个groupByArea，绘制簇形柱状图。</p>
+<p>俊俊希望簇形柱状图的x轴是地区，y轴数据则是各地区对应的每年销售额。</p>
+<p>![img](1-40 (1).png)</p>
+</li>
+<li><p>绘制簇形柱状图只需要对一个DataFrame对象，使用pandas模块中的<code>plot.bar()</code>函数即可。</p>
+<p>在不指定x轴和y轴数据的情况下，行索引index会作为x轴，每一行数值类型的值会被分组到并排的柱子中作为y轴。</p>
+<p>也就是说，如果要绘制出俊俊所设想的簇形柱状图，需要重塑groupByArea的多层索引，让地区作为行索引index，各地区每年的销售总额作为每一行数值类型的值。</p>
+</li>
+<li><p>我们可以使用<code>unstack()</code>函数，将groupByArea里，名称为”订单日期”的行索引转变为列索引即可。</p>
+<p>转变后，groupByArea的行索引就变成了地区，列索引则变成了订单日期。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用unstack()函数将groupByArea按照&quot;订单日期&quot;重新排列</span></span><br><span class="line">groupByArea = groupByArea.unstack(<span class="string">&quot;订单日期&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出groupByArea</span></span><br><span class="line"><span class="built_in">print</span>(groupByArea)</span><br></pre></td></tr></table></figure></li>
+<li><p>现在就可以根据groupByArea，绘制簇形柱状图。绘图的准备工作已做好～</p>
+<p>老规矩，为了让图像更利于理解，我们使用 <code>strftime()</code>函数，先将groupByArea的columns转换为”年”的格式。</p>
+<p>然后直接对groupByArea调用<code>plot.bar()</code>函数即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导入matplotlib.pyplot，并使用&quot;plt&quot;作为该模块的简写</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过给 plt.rcParams[&quot;font.sans-serif&quot;] 赋值</span></span><br><span class="line"><span class="comment"># 将字体设置为 Arial Unicode MS </span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>] = <span class="string">&quot;Arial Unicode MS&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TODO 将groupByArea变量中columns转换为&quot;%Y&quot;的格式</span></span><br><span class="line">groupByArea.columns = groupByArea.columns.strftime(<span class="string">&quot;%Y&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># TODO 对groupByArea变量使用plot.bar()函数绘制簇形柱状图</span></span><br><span class="line">groupByArea.plot.bar()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用plt.show()函数显示图像</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></li>
+<li><p>通过不同地区年度销售额我们可以看出：</p>
+<p>每个地区总体每年销售额均处于上升趋势，尤其在东北、中南和华东三个地区的增长速度较快，可以看出市场占有能力在不断增加，企业市场前景比较好，下一年可以适当加大运营成本。</p>
+<p>其他地区可以根据自身地区消费特点，借鉴东北、中南和华东地区的运营模式。</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/posts/1726962663/%E4%BE%BF%E5%88%A9%E5%BA%97%E7%9A%84%E9%94%80%E5%94%AE%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90.png" alt="img"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%BF%9B%E9%98%B6/" rel="tag"># python数据分析进阶</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2126864340/" rel="prev" title="拓扑排序算法">
+      <i class="fa fa-chevron-left"></i> 拓扑排序算法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/859299427/" rel="next" title="数据可视化入门">
+      数据可视化入门 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">1.数据分析的流程</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VyacheslavKorotki"
+      src="/images/head_photo.jpg">
+  <p class="site-author-name" itemprop="name">VyacheslavKorotki</p>
+  <div class="site-description" itemprop="description">记录学习的过程</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VyacheslavKorotki</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
