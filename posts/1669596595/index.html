@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="整理的内容 OJ在线测试输入输出的模板 Java常用数据结构以及操作 字符串常用操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在线OJ需要注意的点">
+<meta property="og:url" content="http://example.com/posts/1669596595/index.html">
+<meta property="og:site_name" content="VyacheslavK&#39;s Notes">
+<meta property="og:description" content="整理的内容 OJ在线测试输入输出的模板 Java常用数据结构以及操作 字符串常用操作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/posts/1669596595/v2-711a4801c8fed288bf6c568b5d729db1_1440w.jpg">
+<meta property="article:published_time" content="2022-08-30T09:38:05.000Z">
+<meta property="article:modified_time" content="2022-08-30T09:39:55.472Z">
+<meta property="article:author" content="VyacheslavKorotki">
+<meta property="article:tag" content="leetcode刷题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/posts/1669596595/v2-711a4801c8fed288bf6c568b5d729db1_1440w.jpg">
+
+<link rel="canonical" href="http://example.com/posts/1669596595/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>在线OJ需要注意的点 | VyacheslavK's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">VyacheslavK's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/1669596595/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head_photo.jpg">
+      <meta itemprop="name" content="VyacheslavKorotki">
+      <meta itemprop="description" content="记录学习的过程">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VyacheslavK's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在线OJ需要注意的点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-30 17:38:05 / 修改时间：17:39:55" itemprop="dateCreated datePublished" datetime="2022-08-30T17:38:05+08:00">2022-08-30</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="整理的内容"><a href="#整理的内容" class="headerlink" title="整理的内容"></a>整理的内容</h4><ol>
+<li>OJ在线测试输入输出的模板</li>
+<li>Java常用数据结构以及操作</li>
+<li>字符串常用操作</li>
+</ol>
+<span id="more"></span>
+
+<h4 id="1-OJ在线测试输入输出的模板"><a href="#1-OJ在线测试输入输出的模板" class="headerlink" title="1.OJ在线测试输入输出的模板"></a>1.OJ在线测试输入输出的模板</h4><ol>
+<li><p>整体框架如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"></span><br><span class="line">public <span class="keyword">class</span> <span class="title class_">Main</span>()&#123;</span><br><span class="line">		public static void main(String[] args)&#123;	</span><br><span class="line">      	Scanner sc = new Scanner(System.<span class="keyword">in</span>); </span><br><span class="line">      	<span class="keyword">while</span>(sc.hasNext())&#123; //注意，如果输入是多个测试用例，请通过<span class="keyword">while</span>循环处理多个测试用例</span><br><span class="line">          	</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>​    在main函数中写代码</p>
+<ul>
+<li><p>注意：</p>
+<p>不要自定义包名称，否则会报错，即不要添加package answer之类的语句；</p>
+<p>您可以写很多个类，但是必须有一个类名为 Main，并且为public属性，并且Main为唯一的public class；</p>
+<p>Main类的里面必须包含一个名字为’main’的静态方法（函数），这个方法是程序的入口。</p>
+</li>
+</ul>
+<ol start="2">
+<li><p>读取输入，有若干种方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读一个整数</span></span><br><span class="line"> <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> sc.nextInt(); </span><br><span class="line"><span class="comment">// 读一个字符串</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> sc.next(); </span><br><span class="line"><span class="comment">// 读一个浮点数</span></span><br><span class="line"><span class="type">double</span> <span class="variable">t</span> <span class="operator">=</span> sc.nextDouble(); </span><br><span class="line"><span class="comment">// 读一整行</span></span><br><span class="line"> <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> sc.nextLine(); </span><br><span class="line"><span class="comment">// 判断是否有下一个输入</span></span><br><span class="line">sc.hasNext()</span><br><span class="line">sc.hasNextInt()</span><br><span class="line">sc.hasNextDouble()</span><br><span class="line">sc.hasNextLine() </span><br></pre></td></tr></table></figure></li>
+<li><p>输出方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(); <span class="comment">// 调用println()方法时，会自动在后面加上换行符</span></span><br><span class="line">System.out.print();  <span class="comment">// 如果不希望它加换行符的话，就要使用print()方法</span></span><br><span class="line">System.out.printf(); <span class="comment">// 格式化输出，不会自动加换行符</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*** 输出字符串 ***/</span></span><br><span class="line"><span class="comment">// %s表示输出字符串，也就是将后面的字符串替换模式中的%s</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%s&quot;</span>, <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1212</span>));</span><br><span class="line"><span class="comment">// %n表示换行</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%s%n&quot;</span>, <span class="string">&quot;end line&quot;</span>);</span><br><span class="line"><span class="comment">// 还可以支持多个参数</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%s = %s%n&quot;</span>, <span class="string">&quot;Name&quot;</span>, <span class="string">&quot;Zhangsan&quot;</span>);</span><br><span class="line"><span class="comment">// %S将字符串以大写形式输出</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%S = %s%n&quot;</span>, <span class="string">&quot;Name&quot;</span>, <span class="string">&quot;Zhangsan&quot;</span>);</span><br><span class="line"><span class="comment">// 支持多个参数时，可以在%s之间插入变量编号，1$表示第一个字符串，3$表示第3个字符串</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%1$s = %3$s %2$s%n&quot;</span>, <span class="string">&quot;Name&quot;</span>, <span class="string">&quot;san&quot;</span>, <span class="string">&quot;Zhang&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*** 输出boolean类型 ***/</span></span><br><span class="line">System.out.printf(<span class="string">&quot;true = %b; false = &quot;</span>, <span class="literal">true</span>);</span><br><span class="line">System.out.printf(<span class="string">&quot;%b%n&quot;</span>, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*** 输出整数类型***/</span></span><br><span class="line"><span class="type">Integer</span> <span class="variable">iObj</span> <span class="operator">=</span> <span class="number">342</span>;</span><br><span class="line"><span class="comment">// %d表示将整数格式化为10进制整数</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%d; %d; %d%n&quot;</span>, -<span class="number">500</span>, <span class="number">2343L</span>, iObj);</span><br><span class="line"><span class="comment">// %o表示将整数格式化为8进制整数</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%o; %o; %o%n&quot;</span>, -<span class="number">500</span>, <span class="number">2343L</span>, iObj);</span><br><span class="line"><span class="comment">// %x表示将整数格式化为16进制整数</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%x; %x; %x%n&quot;</span>, -<span class="number">500</span>, <span class="number">2343L</span>, iObj);</span><br><span class="line"><span class="comment">// %X表示将整数格式化为16进制整数，并且字母变成大写形式</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%X; %X; %X%n&quot;</span>, -<span class="number">500</span>, <span class="number">2343L</span>, iObj);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*** 输出浮点类型***/</span></span><br><span class="line"><span class="type">Double</span> <span class="variable">dObj</span> <span class="operator">=</span> <span class="number">45.6d</span>;</span><br><span class="line"><span class="comment">// %e表示以科学技术法输出浮点数</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%e; %e; %e%n&quot;</span>, -<span class="number">756.403f</span>, <span class="number">7464.232641d</span>, dObj);</span><br><span class="line"><span class="comment">// %E表示以科学技术法输出浮点数，并且为大写形式</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%E; %E; %E%n&quot;</span>, -<span class="number">756.403f</span>, <span class="number">7464.232641d</span>, dObj);</span><br><span class="line"><span class="comment">// %f表示以十进制格式化输出浮点数</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%f; %f; %f%n&quot;</span>, -<span class="number">756.403f</span>, <span class="number">7464.232641d</span>, dObj);</span><br><span class="line"><span class="comment">// 还可以限制小数点后的位数</span></span><br><span class="line">System.out.printf(<span class="string">&quot;%.1f; %.3f; %f%n&quot;</span>, -<span class="number">756.403f</span>, <span class="number">7464.232641d</span>, dObj);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1669596595/v2-711a4801c8fed288bf6c568b5d729db1_1440w.jpg" alt="img"></p>
+</li>
+</ol>
+<h4 id="2-Java常用数据结构以及操作"><a href="#2-Java常用数据结构以及操作" class="headerlink" title="2. Java常用数据结构以及操作"></a>2. Java常用数据结构以及操作</h4><ol>
+<li><p>数组</p>
+<ol>
+<li><p>不可变长数组 <code>int[] nums = new int[length];</code></p>
+<p>操作：</p>
+<ol>
+<li>获取数组的大小：<code>nums.length</code></li>
+</ol>
+</li>
+<li><p>可变长数组 <code>List&lt;Integer&gt; list = new ArrayList&lt;&gt;();</code></p>
+<p>操作：</p>
+<ol>
+<li>添加: <code>list.add(num);</code></li>
+<li>获取:<code>list.get(index);</code></li>
+<li>删除：<code>list.remove(index);</code></li>
+<li>获取数组的大小:<code>list.size()</code></li>
+<li>判断数组是否含有元素：<code>list.contains()</code></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>链表</p>
+<ol>
+<li><p>基本数据结构</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListNode</span>&#123;</span><br><span class="line">		pubic <span class="type">int</span> val;</span><br><span class="line">		<span class="keyword">public</span> ListNode next;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">public</span> <span class="title function_">ListNode</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ListNode</span><span class="params">(<span class="type">int</span> val)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ListNode(<span class="type">int</span> val, ListNode next) &#123;</span><br><span class="line">        <span class="built_in">this</span>.val = val;</span><br><span class="line">        <span class="built_in">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ListNode&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;val=&quot;</span> + val +</span><br><span class="line">                <span class="string">&quot;, next=&quot;</span> + next +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>操作：</p>
+<ol>
+<li>获取链表节点的值：<code>int num = node.val;</code></li>
+<li>获取链表节点的下一个：<code>ListNode temp = node.next</code></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>哈希</p>
+<ol>
+<li><p>HashSet</p>
+<ul>
+<li><p>实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;Integer&gt; hashset = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br></pre></td></tr></table></figure></li>
+<li><p>操作：</p>
+<ol>
+<li>加入元素：<code>hashset.add(num);</code></li>
+<li>删除元素：<code>hashset.remove(num);</code></li>
+<li>判断集合是否为空：<code>hashset.isEmpty()</code></li>
+<li>清空集合：<code>hashset.clear();</code></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>HashMap</p>
+<ul>
+<li><p>实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br></pre></td></tr></table></figure></li>
+<li><p>操作</p>
+<ol>
+<li>加入键值对：<code>map.put(str, num);</code></li>
+<li>删除键值对：<code>map.remove(str);</code></li>
+<li>根据键获取值：<code>int numStr = map.get(str);</code></li>
+<li>根据键获取值，如果键不存在，则返回设定的值：<code>int value = map.getOrDefault(str, default)</code></li>
+<li>判断集合是否为空：<code>map.isEmpty()</code></li>
+<li>清空集合：<code>map.clear();</code></li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>栈</p>
+<ul>
+<li><p>实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Deque&lt;Integer&gt; stack = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br></pre></td></tr></table></figure></li>
+<li><p>操作</p>
+<ol>
+<li>入栈：<code>stack.push(num);</code></li>
+<li>出栈：<code>stack.pop();</code></li>
+<li>获取栈顶元素:<code>int num = stack.peek();</code></li>
+<li>判断栈是否为空:<code>stack.isEmpty()</code></li>
+<li>获取栈的大小:<code>stack.size()</code></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>队列</p>
+<ul>
+<li><p>实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Queue&lt;Integer&gt; queue = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br></pre></td></tr></table></figure></li>
+<li><p>操作</p>
+<ul>
+<li>在队尾端插入元素：<code>queue.offer(num);</code></li>
+<li>移除队首元素：<code>queue.poll();</code></li>
+<li>获取队首元素值：<code>int num = queue.peek();</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-字符串常用操作"><a href="#3-字符串常用操作" class="headerlink" title="3.字符串常用操作"></a>3.字符串常用操作</h4><ol>
+<li><p>字符串与字符数组之间的转换</p>
+<ul>
+<li>字符串转字符数组：<code>char[] ch = str.toCharArray();</code></li>
+<li>字符数组转字符串：<code>String str = new String(ch);</code></li>
+</ul>
+</li>
+<li><p><code>StringBuilder</code>类的操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder sb = new StringBuilder();</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>添加字符串：<code>sb.append(str);</code></li>
+<li><code>StringBuilder</code>与<code>String</code>之间的转换<ol>
+<li><code>StringBuilder</code>转换为<code>String</code>：<code>String str = sb.toString();</code></li>
+<li><code>String</code>转换为<code>StringBuilder</code>：<code>StringBuilder sb = new StringBuilder(str);</code></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/leetcode%E5%88%B7%E9%A2%98/" rel="tag"># leetcode刷题</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/3656670495/" rel="prev" title="单调队列">
+      <i class="fa fa-chevron-left"></i> 单调队列
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E7%90%86%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-number">1.</span> <span class="nav-text">整理的内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-OJ%E5%9C%A8%E7%BA%BF%E6%B5%8B%E8%AF%95%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%9A%84%E6%A8%A1%E6%9D%BF"><span class="nav-number">2.</span> <span class="nav-text">1.OJ在线测试输入输出的模板</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Java%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BB%A5%E5%8F%8A%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">2. Java常用数据结构以及操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">3.字符串常用操作</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="VyacheslavKorotki"
+      src="/images/head_photo.jpg">
+  <p class="site-author-name" itemprop="name">VyacheslavKorotki</p>
+  <div class="site-description" itemprop="description">记录学习的过程</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VyacheslavKorotki</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
